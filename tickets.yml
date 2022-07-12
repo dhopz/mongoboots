@@ -1,0 +1,31 @@
+tickets:
+  - title: Add tests for existing functionality
+    description: |
+      There is some functionality that already exists, and once you have
+      established a connection to your cloud Mongo database, you will be able to
+      use this functionality. However, there are no tests!
+
+      Your task is to add tests for the current existing functionality.
+
+  - title: Implement GET functionality for the different TrackRepository methods
+    description: |
+      As part of the TrackRepository file, you will see some methods that should
+      perform some find tasks against the MongoDB database. 
+      
+      Your task will be to implement these features so that your API can handle
+      these upcoming request from clients.
+
+  - title: Implement PUT for tracks
+  description: |
+    A user complained that they made a typo once they added a new track and now
+    they can't seem to update this information.
+
+    We would like to be able to update both the track name and author. Or either
+    of these two as needed by the user.
+    
+    Your task will be to add this functionality.
+
+  - title: Implement DELETING tracks
+    description: |
+      Based on a DELETE request from the client, a relevant track should be
+      erased from the database.
