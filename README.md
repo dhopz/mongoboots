@@ -1,7 +1,7 @@
 # Makers Mongoboots
 
 _Coaching this? Find the source
-[here.](https://github.com/makersacademy/slug/blob/main/materials/universe/engineering_projects/mongo_boots/README.ed.md)_
+[here.](https://github.com/makersacademy/slug/blob/main/materials/universe/engineering_projects/mongo-boots/README.ed.md)_
 
 This is the Mongoboots Engineering Project.
 
@@ -34,14 +34,14 @@ need to wait for the dependencies to install.
 
 Then, in the Gradle sidebar:
 
-* To run the tests: `Aceplay -> Tasks -> Verification -> Test`
+* To run the tests: `mongo-boots -> Tasks -> Verification -> Test`
 
 If you encounter any problems, they are not intended. Contact your coach for
 advice.
 
 ### Stage Two: Development Server
 
-Finally, to run the server, open the Gradle sidebar and run `Aceplay -> Tasks ->
+Finally, to run the server, open the Gradle sidebar and run `mongo-boots -> Tasks ->
 Application -> bootRun`.
 
 This won't work out of the blue. If you are getting a `Connection`-type error,
