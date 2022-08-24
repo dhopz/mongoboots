@@ -17,6 +17,11 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	implementation 'org.mongodb:mongo-java-driver:3.12.11'
+	// https://mvnrepository.com/artifact/de.flapdoodle.embed/de.flapdoodle.embed.mongo
+	testImplementation 'de.flapdoodle.embed:de.flapdoodle.embed.mongo:3.4.8'
+	testImplementation 'junit:junit:4.13.2'
+	// https://mvnrepository.com/artifact/org.springframework.data/spring-data-mongodb
+	implementation 'org.springframework.data:spring-data-mongodb:3.4.2'
 
 }
 

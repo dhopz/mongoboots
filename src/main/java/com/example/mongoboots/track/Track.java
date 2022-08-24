@@ -12,6 +12,7 @@ public class Track {
     private String artist;
 
     public Track(String id, String title, String artist) {
+        super();
         this.id = id;
         this.title = title;
         this.artist = artist;
