@@ -6,10 +6,10 @@ import org.springframework.data.mongodb.repository.Query;
 import java.util.List;
 
 public interface TrackRepository extends MongoRepository<Track, String> {
-    @Query("{name:'?0'}")
-    Track findTrackByName(String name);
+    @Query("{title:'?0'}")
+    Track findTrackByName(String title);
 
-    @Query(value="{author:'?0'}", fields="{'name' : 1, 'author' : 1}")
+    @Query(value="{artist:'?0'}", fields="{'title' : 1, 'artist' : 1}")
     List<Track> findAll(String category);
 
     public long count();

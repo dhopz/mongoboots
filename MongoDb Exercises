@@ -1,0 +1,137 @@
+MongoDb
+
+Password = m001-mongodb-basics
+
+To connect:
+mongosh "mongodb+srv://sandbox.fzjbe3f.mongodb.net/myFirstDatabase" --apiVersion 1 --username m001-student
+
+mongodump --uri "mongodb+srv://m001-student:m001-mongodb-basics@sandbox.fzjbe3f.mongodb.net/sample_supplies"
+
+mongoexport --uri="mongodb+srv://m001-student:m001-mongodb-basics@sandbox.fzjbe3f.mongodb.net/sample_supplies" --collection=sales --out=sales.json
+
+mongorestore --uri "mongodb+srv://m001-student:m001-mongodb-basics@sandbox.fzjbe3f.mongodb.net/sample_supplies"  --drop dump
+
+mongoimport --uri="mongodb+srv://m001-student:m001-mongodb-basics@sandbox.fzjbe3f.mongodb.net/sample_supplies" --drop sales.json
+
+Connect to the Atlas
+mongo "mongodb+srv://mongodb+srv://m001-student:m001-mongodb-basics@sandbox.fzjbe3f.mongodb.net/admin"
+
+
+Navigate to the database
+use sample_training
+
+Inserting New Documents ORDER
+db.inspections.insert([{ "_id": 1, "test": 1 },{ "_id": 1, "test": 2 }, { "_id": 3, "test": 3 }],{ "ordered": false })
+
+Drop the Collection
+db.inspection.drop()
+
+Comparison Operators
+$eq equal to
+$ne not equal to
+$gt greater than
+$lt less than
+$gte greater than or equal to
+$lte less than or equal to
+$and
+$or
+$nor
+$not
+
+db.trips.find({ "tripduration": { "$lte" : 70 }, "usertype": { "$ne": "Subscriber" } }).pretty()
+
+db.routes.find({ "stops": { "$gt": 0}}).pretty()
+
+db.routes.find({ "$and": [ { "$or" :[ { "dst_airport": "KZN" },
+                                    { "src_airport": "KZN" }
+                                  ] },
+                          { "$or" :[ { "airplane": "CR2" },
+                                     { "airplane": "A81" } ] }
+                         ]}).pretty()
+
+Greater than 5000, less than 1,000,000
+db.zips.find({ "pop": { "$gte": 5000, "$lte": 1000000 }}).count()
+
+db.companies.find({founded year:2004, $or:[{“category_code”:”social”},{“category_code”:”web”}]}	
+
+
+db.companies.find(
+	{$or:[{category_code:"social"},{category_code:"web"}],
+	"founded_year":2004}).count()	
+
+
+
+db.companies.find({ "$and": [
+                        { "$or": [ { "founded_year": 2004 },
+                                   { "founded_month": 10 } ] },
+                        { "$or": [ { "category_code": "web" },
+                                   { "category_code": "social" }]}]}).count()	
+
+
+Find all documents where the trip lasted longer than 1200 seconds, and started and ended at the same station:
+
+db.trips.find({ "$expr": { "$and": [ { "$gt": [ "$tripduration", 1200 ]},
+                         { "$eq": [ "$end station id", "$start station id" ]}
+                       ]}}).count()
+
+db.companies.find(
+  { "$expr": { "$eq": [ "$permalink", "$twitter_username" ] }}).count()
+
+db.listingsAndReviews.find({ "amenities":"Changing table","property_type":"House"})
+         
+
+
+db.listingsAndReviews.find({ "accommodates": { "$gt": 6},"reviews": {"$size": 50}})
+db.listingsAndReviews.find({ "reviews": {"$size": 20}})
+db.listingsAndReviews.find({ "accommodates": { "$gt": 6}})
+
+db.grades.find({ "scores": { "$elemMatch": { "type": "extra credit" } }
+               }).pretty()
+
+db.companies.find({ "offices": { "$elemMatch": {"city": "Seattle" } }})
+
+db.companies.find({ "relationships":
+                      { "$elemMatch": { "is_past": true,
+                                        "person.first_name": "Mark" } } },
+                  { "name": 1 }).count()
+
+db.trips.find({ "start station location":
+                      { "$elemMatch": { "is_past": true,
+                                        "person.first_name": "Mark" } } },
+                  { "name": 1 }).count()
+
+db.trips.find({ "start station location.coordinates.0": { "$lt": -74 }}).count()
+
+db.listingsAndReviews.aggregate([ { "$project": { "address": 1, "_id": 0 }},
+                                  { "$group": { "_id": "$address.country" }}])
+
+db.listingsAndReviews.aggregate([
+                                  { "$project": { "address": 1, "_id": 0 }},
+                                  { "$group": { "_id": "$address.country",
+                                                "count": { "$sum": 1 } } }
+                                ])
+
+db.listingsAndReviews.aggregate([
+                                  { "$match": { "amenities": "Wifi" } },
+                                  { "$project": { "price": 1,
+                                                  "address": 1,
+                                                  "_id": 0 }}]).pretty()
+
+db.listingsAndReviews.aggregate({ "$group": { "_id": "$room_type" }})
+
+use sample_training
+
+db.zips.find().sort({ "pop": 1 }).limit(1)
+
+db.zips.find({ "pop": 0 }).count()
+
+db.zips.find().sort({ "pop": -1 }).limit(1)
+
+db.zips.find().sort({ "pop": -1 }).limit(10)
+
+db.zips.find().sort({ "pop": 1, "city": -1 })
+
+
+db.trips.createIndex({ "birth year": 1 })
+
+db.trips.createIndex({ "start station id": 1, "birth year": 1 })

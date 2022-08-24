@@ -8,13 +8,37 @@ public class Track {
     @Id
     private String id;
 
-    private String name;
-    private String author;
+    private String title;
+    private String artist;
 
-    public Track(String id, String name, String author) {
+    public Track(String id, String title, String artist) {
         super();
         this.id = id;
-        this.name = name;
-        this.author = author;
+        this.title = title;
+        this.artist = artist;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getArtist() {
+        return artist;
+    }
+
+    public void setArtist(String artist) {
+        this.artist = artist;
     }
 }
