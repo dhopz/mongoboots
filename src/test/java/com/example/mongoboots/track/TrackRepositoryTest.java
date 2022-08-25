@@ -1,27 +1,24 @@
 package com.example.mongoboots.track;
 
-import com.mongodb.client.MongoClients;
-import org.junit.After;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
-import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit4.SpringRunner;
 
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.data.mongodb.core.query.Criteria.where;
 
-@RunWith(SpringRunner.class)
-@DataMongoTest
-@DirtiesContext
+
+@ExtendWith(SpringExtension.class)
+@DataMongoTest(properties = {"spring.mongodb.embedded.version=4.0.2"})
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class TrackRepositoryTest {
+
     @Autowired
     private TrackRepository trackRepository;
     @Autowired
@@ -38,13 +35,15 @@ class TrackRepositoryTest {
     }
 
     @Test
-    void testSaveAndFindTrack() throws Exception {
+    void testSaveAndFindTrack() {
         Track track1 = new Track("1", "blab-la","something");
+        Track track2 = new Track("2", "blab-la-la","something else");
         trackRepository.save(track1);
+        trackRepository.save(track2);
 
         assertEquals("1", trackRepository.findByTrackId("1").getId());
-//        assertEquals(track2, mongoTemplate.findByTrackId("2"));
-//        assertNull(trackRepository.findByTrackId("3"));
+        assertEquals("2", trackRepository.findByTrackId("2").getId());
+        assertNull(trackRepository.findByTrackId("3"));
     }
 
 }
