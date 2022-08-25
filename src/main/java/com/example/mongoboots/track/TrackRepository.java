@@ -11,13 +11,13 @@ import java.util.List;
 public interface TrackRepository extends MongoRepository<Track, String> {
 
     @Query("{title:'?0'}")
-    Track findTrackByName(String title);
+    Track findTrackByTitle(String title);
 
     @Query("{id:'?0'}")
     Track findByTrackId(String id);
 
     @Query(value="{artist:'?0'}", fields="{'title' : 1, 'artist' : 1}")
-    List<Track> findAll(String category);
+    List<Track> findAll(String artist);
 
     public long count();
 
