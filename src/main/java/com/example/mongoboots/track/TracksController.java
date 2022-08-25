@@ -24,9 +24,14 @@ public class TracksController {
         return trackRepository.findAll();
     }
 
-    @GetMapping("/api/tracks/id")
+    @GetMapping("/api/tracks/title")
     public Track getTitle(@RequestBody TrackDTO trackDTO) {
         return trackRepository.findTrackByTitle(trackDTO.getTitle());
+    }
+
+    @GetMapping("/api/tracks/id")
+    public Track getId(@RequestBody TrackDTO trackDTO) {
+        return trackRepository.findByTrackId(trackDTO.getId());
     }
 
     @GetMapping("/api/tracks/artist")
