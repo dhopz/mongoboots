@@ -10,6 +10,10 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
+import java.net.URL;
+
+import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -61,6 +65,69 @@ class TrackRepositoryTest {
         Track track = trackRepository.findByTrackId("10");
         assertEquals("Blue Line Swinger", track.getTitle());
         assertEquals("Yo La Tengo", track.getArtist());
+    }
+
+    @Test
+    void TracksIndexReturnsTracks() throws Exception {
+        mvc.perform(MockMvcRequestBuilders.get("/api/tracks")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$[0].title").value("blab-la"))
+                .andExpect(jsonPath("$[0].artist").value("something"))
+                .andExpect(jsonPath("$[1].title").value("blab-la-la"))
+                .andExpect(jsonPath("$[1].artist").value("something else"));
+    }
+
+    @Test
+    void TracksFindById() throws Exception {
+        mvc.perform(
+                        MockMvcRequestBuilders.get("/api/tracks/id")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content("{\"id\": \"1\"}"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.title").value("blab-la"))
+                .andExpect(jsonPath("$.artist").value("something"));
+    }
+
+    @Test
+    void TracksFindByTitle() throws Exception {
+        mvc.perform(
+                        MockMvcRequestBuilders.get("/api/tracks/title")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content("{\"title\": \"blab-la\"}"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.title").value("blab-la"))
+                .andExpect(jsonPath("$.artist").value("something"));
+    }
+
+    @Test
+    void TracksFindByArtist() throws Exception {
+        mvc.perform(
+                        MockMvcRequestBuilders.get("/api/tracks/artist")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content("{\"artist\": \"something\"}"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$[0].title").value("blab-la"))
+                .andExpect(jsonPath("$[0].artist").value("something"));
+    }
+
+//    A user complained that they made a typo once they added a new track and now
+//    they can't seem to update this information.
+    @Test
+    void TracksFindByIdAndAmendTitleAndArtist() throws Exception {
+        mvc.perform(
+                        MockMvcRequestBuilders.post("/api/tracks")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content("{\"id\": \"1\",\"title\": \"Blue Line Swinger\", \"artist\": \"Yo La Tengo\"}"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.title").value("Blue Line Swinger"))
+                .andExpect(jsonPath("$.artist").value("Yo La Tengo"));
     }
 
 }
