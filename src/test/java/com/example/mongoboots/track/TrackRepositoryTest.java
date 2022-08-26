@@ -130,4 +130,34 @@ class TrackRepositoryTest {
                 .andExpect(jsonPath("$.artist").value("Yo La Tengo"));
     }
 
+    @Test
+    void TracksFindAndDeleteById() throws Exception {
+        Track track3 = new Track("3", "Title Delete","Artist Delete");
+        trackRepository.save(track3);
+
+        mvc.perform(
+                        MockMvcRequestBuilders.delete("/api/tracks/" + track3.getId()))
+                .andExpect(status().isNoContent());
+    }
+
+    //    A user complained that they made a typo once they added a new track and now
+    //    they can't seem to update this information.
+    @Test
+    void TracksAmendTitleAndArtist() throws Exception {
+        Track track3 = new Track("3", "Title Delete","Artist Delete");
+        trackRepository.save(track3);
+
+        mvc.perform(
+                        MockMvcRequestBuilders.put("/api/tracks/" + track3.getId())
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content("{\"id\": \"3\",\"title\": \"Blue Line Swinger\", \"artist\": \"Yo La Tengo\"}"))
+                        .andExpect(status().isOk())
+                        .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
+
+        Track track = trackRepository.findByTrackId(track3.getId());
+        assertEquals("Blue Line Swinger", track.getTitle());
+        assertEquals("Yo La Tengo", track.getArtist());
+
+    }
+
 }

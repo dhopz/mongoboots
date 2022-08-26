@@ -2,9 +2,12 @@ package com.example.mongoboots.track;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @EnableMongoRepositories
@@ -37,6 +40,30 @@ public class TracksController {
     @GetMapping("/api/tracks/artist")
     public List<Track> getArtist(@RequestBody TrackDTO trackDTO) {
         return trackRepository.findAll(trackDTO.getArtist());
+    }
+
+    @DeleteMapping("/api/tracks/{id}")
+    public ResponseEntity<HttpStatus> deleteTrack(@PathVariable("id") String id) {
+        try {
+            trackRepository.deleteById(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PutMapping("/api/tracks/{id}")
+    public ResponseEntity<Track> updateTrack(@PathVariable("id") String id, @RequestBody TrackDTO trackDTO) {
+        Optional<Track> trackData = trackRepository.findById(id);
+        if (trackData.isPresent()) {
+            Track newTrack = trackData.get();
+            newTrack.setTitle(trackDTO.getTitle());
+            newTrack.setArtist(trackDTO.getArtist());
+
+            return new ResponseEntity<>(trackRepository.save(newTrack), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
 

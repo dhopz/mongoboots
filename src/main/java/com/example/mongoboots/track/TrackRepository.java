@@ -21,4 +21,7 @@ public interface TrackRepository extends MongoRepository<Track, String> {
 
     public long count();
 
+//    @Query(value="{'id' : $0}", delete = true)
+//    void deleteById (String trackId);
+
 }
